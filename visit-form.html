@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>長照服務品質管理｜訪視紀錄表單</title>
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <div style="font-size:14px; line-height:1;">新竹縣智慧福利服務躍升</div>
+          <div style="font-size:12px; opacity:.9; font-weight:800;">長照服務品質管理</div>
+        </div>
+      </div>
+
+      <div class="nav-title">功能選單</div>
+
+      <details class="mt-1" open>
+        <summary class="menu-summary">
+          <span class="menu-summary-title">長照服務品質管理</span>
+          <span class="menu-summary-caret">▾</span>
+        </summary>
+
+        <ul class="menu mt-2">
+          <li>
+            <a class="active" href="./index.html">
+              <span>個案管理</span>
+            </a>
+          </li>
+          <li>
+            <a href="./report.html">
+              <span>統計報表</span>
+            </a>
+          </li>
+          <li>
+            <a href="./staff.html">
+              <span>訪視員管理</span>
+            </a>
+          </li>
+        </ul>
+      </details>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div class="left">
+          <span style="font-size:18px;">新竹縣智慧福利服務躍升</span>
+          <span class="pill">訪視紀錄表單</span>
+        </div>
+        <div style="opacity:.95; font-weight:800;">
+          <span class="me-2">👤</span>系統管理員
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="page-title">▶ 個案管理 / 訪視紀錄</div>
+
+        <section class="card p-3">
+          <div class="inline-tools">
+            <button id="btnCopyLast" type="button" class="btn btn-secondary-soft btn-sm" style="display: none;">帶入上次訪視資料</button>
+            <button id="btnBack" type="button" class="btn btn-danger-soft btn-sm">返回</button>
+            <button id="btnSave" type="button" class="btn btn-brand btn-sm">儲存</button>
+          </div>
+
+          <div class="section-title">訪視紀錄詳細資料</div>
+
+          <form id="visitForm">
+            <div class="row g-3">
+              
+              <!-- Block 1: 狀態勾選 -->
+              <div class="col-12 d-flex align-items-center py-3 gap-4 bg-light rounded border">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="chkReopen">
+                  <label class="form-check-label" for="chkReopen">舊案重開案</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="chkNoDisability">
+                  <label class="form-check-label" for="chkNoDisability">無失能</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="chkTempNoService">
+                  <label class="form-check-label" for="chkTempNoService">暫不申請服務</label>
+                </div>
+              </div>
+
+              <!-- Block 2: 基本資料 -->
+              <div class="col-12"><div class="section-title mt-4">基本資料</div></div>
+              
+              <div class="col-lg-6">
+                <label class="lbl" for="vAssessment">評估</label>
+                <select id="vAssessment" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="初評">初評</option>
+                  <option value="一般複評">一般複評</option>
+                  <option value="出準初評">出準初評</option>
+                  <option value="短期間重複評估">短期間重複評估</option>
+                  <option value="住宿式機構">住宿式機構</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vAssessDate">評估日期</label>
+                <input id="vAssessDate" type="date" class="form-control" />
+              </div>
+
+              <div class="col-lg-6">
+                <label class="lbl" for="vVisitTime">約訪時間</label>
+                <input id="vVisitTime" type="time" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vUnitName">單位名稱</label>
+                <input id="vUnitName" class="form-control" />
+              </div>
+
+              <div class="col-lg-6">
+                <label class="lbl" for="vVisitStaff">訪視人員</label>
+                <select id="vVisitStaff" class="form-select"></select>
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vForeignApp">外看填寫申請書</label>
+                <select id="vForeignApp" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="是">是</option>
+                  <option value="否">否</option>
+                </select>
+              </div>
+
+              <!-- 居家醫師 -->
+              <div class="col-12"><div class="section-title mt-4">居家醫師</div></div>
+              
+              <div class="col-lg-6">
+                <label class="lbl" for="vHomeDocPlan">居家家庭醫師照顧方案(是否)</label>
+                <select id="vHomeDocPlan" class="form-select">
+                  <option value="否">否</option>
+                  <option value="是">是</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vHomeDocDate">居家家庭醫師派案日期</label>
+                <input id="vHomeDocDate" type="date" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vHomeDocUnit">居家醫師單位</label>
+                <input id="vHomeDocUnit" class="form-control" />
+              </div>
+
+              <div class="col-lg-6"></div>
+
+              <!-- 計畫審核 -->
+              <div class="col-12"><div class="section-title mt-4">計畫審核</div></div>
+              
+              <div class="col-lg-6">
+                <label class="lbl" for="vPlanSubmitDate">照專計畫送審日期</label>
+                <input id="vPlanSubmitDate" type="date" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vReview1">簽審一(督導)</label>
+                <input id="vReview1" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vReview3">簽審三(照專核定A單位計畫)</label>
+                <input id="vReview3" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vReview3Time">簽審三計畫核定作業時效(目標&lt;5天)</label>
+                <input id="vReview3Time" class="form-control" placeholder="天數" />
+              </div>
+
+              <!-- 照會與服務 -->
+              <div class="col-12"><div class="section-title mt-4">照會與服務</div></div>
+              
+              <div class="col-lg-6">
+                <label class="lbl" for="vReferralDate">照會日期</label>
+                <input id="vReferralDate" type="date" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vTrackDate">照會後追蹤(5日內)</label>
+                <input id="vTrackDate" type="date" class="form-control" />
+              </div>
+
+              <div class="col-lg-6">
+                <label class="lbl" for="vBc5Day">BC單位是否於5天內提供第一次服務</label>
+                <select id="vBc5Day" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="是">是</option>
+                  <option value="否">否</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vFirstServiceDate">第一次提供服務日</label>
+                <input id="vFirstServiceDate" type="date" class="form-control" />
+              </div>
+              <div class="col-lg-6">
+                <label class="lbl" for="vFirstServiceTime">第一次服務日作業時效(目標&lt;5天)</label>
+                <input id="vFirstServiceTime" class="form-control" placeholder="天數" />
+              </div>
+
+              <!-- 備註 -->
+              <div class="col-12 mt-4">
+                <label class="lbl" for="vMemo">備註</label>
+                <textarea id="vMemo" class="form-control" rows="3"></textarea>
+              </div>
+
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+  <script>
+    (async function init(){
+      const visitId = JOY.getQueryParam("visitId");
+      const caseId = JOY.getQueryParam("caseId");
+      const act = JOY.getQueryParam("act"); // 'edit', 'view', or 'add'
+      
+      const data = await JOY.loadData();
+      JOY.setSelectOptions(document.getElementById("vVisitStaff"), data.visitStaff || [], "請選擇");
+
+      // 模擬資料 (對應 form.html 的 mockVisitRows)
+      // 實務上應從後端 API 取得
+      const mockData = {
+        "m1": { assessDate: "2024-12-01", visitTime: "09:00", unitName: "新竹縣長照中心", visitStaff: "王小明", assessment: "初評", homeDocPlan: "否" },
+        "m2": { assessDate: "2025-01-15", visitTime: "14:00", unitName: "竹北日照中心", visitStaff: "陳大文", assessment: "複評", homeDocPlan: "是", homeDocDate: "2025-01-20" },
+        "m3": { assessDate: "2025-02-20", visitTime: "10:30", unitName: "湖口護理之家", visitStaff: "林小美", assessment: "初評", memo: "個案狀況良好" }
+      };
+
+      if (act === 'edit' || act === 'view') {
+        const rec = mockData[visitId] || {};
+        // 填入資料
+        document.getElementById("vAssessDate").value = rec.assessDate || "";
+        document.getElementById("vVisitTime").value = rec.visitTime || "";
+        document.getElementById("vUnitName").value = rec.unitName || "";
+        document.getElementById("vVisitStaff").value = rec.visitStaff || "";
+        document.getElementById("vAssessment").value = rec.assessment || "";
+        document.getElementById("vHomeDocPlan").value = rec.homeDocPlan || "否";
+        document.getElementById("vHomeDocDate").value = rec.homeDocDate || "";
+        document.getElementById("vMemo").value = rec.memo || "";
+        // 其他欄位若有資料可在此填入...
+      }
+
+      if (act === 'add') {
+        document.querySelector(".page-title").innerText = "▶ 個案管理 / 新增訪視紀錄";
+        const btnCopy = document.getElementById("btnCopyLast");
+        btnCopy.style.display = "inline-block";
+
+        btnCopy.addEventListener("click", () => {
+            const allVisits = Object.values(mockData);
+            if (allVisits.length === 0) {
+                alert("沒有任何訪視資料可供帶入。");
+                return;
+            }
+            // Sort by date descending to get the latest
+            allVisits.sort((a, b) => (b.assessDate || '').localeCompare(a.assessDate || ''));
+            const lastVisit = allVisits[0];
+            
+            // 帶入資料，但不包含日期/時間
+            document.getElementById("vUnitName").value = lastVisit.unitName || "";
+            document.getElementById("vVisitStaff").value = lastVisit.visitStaff || "";
+            document.getElementById("vAssessment").value = lastVisit.assessment || "";
+            document.getElementById("vHomeDocPlan").value = lastVisit.homeDocPlan || "否";
+            document.getElementById("vHomeDocDate").value = lastVisit.homeDocDate || "";
+            document.getElementById("vMemo").value = lastVisit.memo || "";
+            alert("已帶入上次訪視資料，請填寫本次的評估日期與時間。");
+        });
+      }
+
+      if(act === "view"){
+        document.querySelector(".page-title").innerText = "▶ 個案管理 / 訪視紀錄 (檢視)";
+        document.getElementById("btnSave").style.display = "none";
+        
+        // 鎖定所有欄位
+        const inputs = document.querySelectorAll("input, select, textarea");
+        inputs.forEach(el => el.disabled = true);
+      }
+
+      // 按鈕事件
+      document.getElementById("btnBack").addEventListener("click", () => {
+        // 返回上一頁 (form.html)
+        if(caseId){
+          window.location.href = `./form.html?id=${encodeURIComponent(caseId)}`;
+        } else {
+          window.history.back();
+        }
+      });
+
+      document.getElementById("btnSave").addEventListener("click", () => {
+        // 模擬儲存
+        const staff = document.getElementById("vVisitStaff").value;
+        const date = document.getElementById("vAssessDate").value;
+        alert(`儲存成功！\n\n訪視人員：${staff}\n評估日期：${date}`);
+        
+        // 儲存後返回
+        if(caseId){
+          window.location.href = `./form.html?id=${encodeURIComponent(caseId)}`;
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>

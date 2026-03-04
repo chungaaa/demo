@@ -1,0 +1,292 @@
+﻿﻿﻿﻿<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>長照服務品質管理｜個案管理（管理）</title>
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <div style="font-size:14px; line-height:1;">新竹縣智慧福利服務躍升</div>
+          <div style="font-size:12px; opacity:.9; font-weight:800;">長照服務品質管理</div>
+        </div>
+      </div>
+
+      <div class="nav-title">功能選單</div>
+
+      <details class="mt-1" open>
+        <summary class="menu-summary">
+          <span class="menu-summary-title">長照服務品質管理</span>
+          <span class="menu-summary-caret">▾</span>
+        </summary>
+
+        <ul class="menu mt-2">
+          <li>
+            <a class="active" href="./index.html">
+              <span>個案管理</span>
+            </a>
+          </li>
+          <li>
+            <a href="./report.html">
+              <span>統計報表</span>
+            </a>
+          </li>
+          <li>
+            <a href="./staff.html">
+              <span>訪視員管理</span>
+            </a>
+          </li>
+        </ul>
+      </details>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div class="left">
+          <span style="font-size:18px;">新竹縣智慧福利服務躍升</span>
+          <span class="pill">個案管理</span>
+          <span class="pill">管理</span>
+        </div>
+        <div style="opacity:.95; font-weight:800;">
+          <span class="me-2">👤</span>系統管理員
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="page-title">▶ 個案管理 / 管理</div>
+
+        
+        <section class="card p-3">
+          <div class="inline-tools">
+            <button id="btnBack" class="btn btn-danger-soft btn-sm">返回</button>
+          </div>
+
+          <div class="section-title">個案資料</div>
+
+          <form id="caseForm">
+            <div class="row g-3">
+              <!-- Row 1: 個案姓名 / 個案身分證 -->
+              <div class="col-lg-6">
+                <label class="lbl" for="fCaseName">個案姓名</label>
+                <input id="fCaseName" class="form-control" />
+              </div>
+
+              <div class="col-lg-6">
+                <label class="lbl" for="fIdNo">個案身分證</label>
+                <div class="input-group">
+                  <input id="fIdNo" class="form-control" placeholder="點右側帶入" readonly />
+                  <button class="btn btn-outline-secondary" type="button" id="btnFillIdNo">帶入</button>
+                </div>
+              </div>
+
+              <!-- Row 2: 住址（同一行：縣市、鄉鎮、村里、鄰、詳細住址） -->
+              <div class="col-lg-2">
+                <label class="lbl" for="fCounty">縣市</label>
+                <select id="fCounty" class="form-select">
+                  <option value="新竹縣">新竹縣</option>
+                </select>
+              </div>
+
+              <div class="col-lg-2">
+                <label class="lbl" for="fTown">鄉鎮</label>
+                <select id="fTown" class="form-select"></select>
+              </div>
+
+              <div class="col-lg-2">
+                <label class="lbl" for="fVillage">村里</label>
+                <select id="fVillage" class="form-select"></select>
+              </div>
+
+              <div class="col-lg-1">
+                <label class="lbl" for="fNeighbor">鄰</label>
+                <input id="fNeighbor" class="form-control" placeholder="例 10" />
+              </div>
+
+              <div class="col-lg-5">
+                <label class="lbl" for="fAddressDetail">詳細住址</label>
+                <input id="fAddressDetail" class="form-control" placeholder="例如：中山路100號3樓" />
+              </div>
+
+              <!-- Row 3: 生日 / 評估 -->
+              <div class="col-lg-6">
+                <label class="lbl" for="fBirthday">生日</label>
+                <input id="fBirthday" type="date" class="form-control" />
+              </div>
+
+              <div class="col-lg-6">
+                <label class="lbl" for="fAssessmentType">最新評估</label>
+                <select id="fAssessmentType" class="form-select">
+                  <option value="">請選擇</option>
+                  <option value="初評">初評</option>
+                  <option value="一般複評">一般複評</option>
+                  <option value="出準初評">出準初評</option>
+                  <option value="短期間重複評估">短期間重複評估</option>
+                  <option value="住宿式機構">住宿式機構</option>
+                </select>
+              </div>
+
+              <!-- Row 4: 訪視人員（最下面，單行左） -->
+              <div class="col-lg-6">
+                <label class="lbl" for="fVisitStaff">目前訪視人員</label>
+                <select id="fVisitStaff" class="form-select"></select>
+              </div>
+              <div class="col-lg-6"></div>
+              <!-- 訪視資料區塊 -->
+              <div class="col-12">
+                <div class="section-title mt-4">訪視資料</div>
+                <div class="d-flex justify-content-end">
+                  <button id="btnAddVisit" type="button" class="btn btn-brand btn-sm">新增訪視</button>
+                </div>
+
+                <div class="table-wrap mt-2">
+                  <table class="table table-hover mb-0" aria-label="訪視資料表">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 18%;">評估日期</th>
+                        <th style="width: 16%;">約訪時間</th>
+                        <th style="width: 30%;">單位名稱</th>
+                        <th style="width: 20%;">訪視人員</th>
+                        <th style="width: 16%;">功能</th>
+                      </tr>
+                    </thead>
+                    <tbody id="visitTableBody">
+                      <tr><td colspan="5" class="text-center text-muted">無資料</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="readonly-note mt-3">
+              * 本頁為雛形：目前不做儲存，後續可加入「儲存/送出」按鈕與 API。
+            </div>
+          </form>
+        </section>
+
+
+        <div class="small-hint mt-2">
+          * 若找不到 id 對應資料，將顯示「查無資料」，可回查詢頁重新進入。
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+  <script>
+    (async function init(){
+      const id = JOY.getQueryParam("id");
+      const data = await JOY.loadData();
+      const rec = (data.mockRecords || []).find(x => x.id === id);
+      document.getElementById("btnBack").addEventListener("click", () => {
+        window.location.href = "./index.html";
+      });
+
+      // setup town/village/staff options
+      JOY.setSelectOptions(document.getElementById("fTown"), data.hsinchuTowns || [], "請選擇");
+      JOY.setSelectOptions(document.getElementById("fVisitStaff"), data.visitStaff || [], "請選擇");
+
+      function refreshVillages(){
+        const town = document.getElementById("fTown").value;
+        const villages = JOY.safeGetVillages(data, town);
+        JOY.setSelectOptions(document.getElementById("fVillage"), villages, "請選擇");
+      }
+      document.getElementById("fTown").addEventListener("change", refreshVillages);
+
+      if(!rec){
+        alert("查無資料（mock），請返回查詢頁重新操作。");
+        return;
+      }
+
+      // fill fields from record
+      document.getElementById("fCaseName").value = rec.caseName || "";
+      document.getElementById("fBirthday").value = rec.birthday || "";
+document.getElementById("fTown").value = rec.town || "";
+      refreshVillages();
+      document.getElementById("fVillage").value = rec.village || "";
+      document.getElementById("fNeighbor").value = rec.neighbor || "";
+      document.getElementById("fAddressDetail").value = rec.addressDetail || "";
+document.getElementById("fVisitStaff").value = rec.visitStaff || "";
+
+      // 模擬三筆資料 (移至外層以便 click 事件使用)
+      const mockVisitRows = [
+        { id: "m1", assessDate: "2024-12-01", visitTime: "09:00", unitName: "新竹縣長照中心", visitStaff: "王小明" },
+        { id: "m2", assessDate: "2025-01-15", visitTime: "14:00", unitName: "竹北日照中心", visitStaff: "陳大文" },
+        { id: "m3", assessDate: "2025-02-20", visitTime: "10:30", unitName: "湖口護理之家", visitStaff: "林小美" }
+      ];
+
+      // render visit records table
+      function renderVisitTable(){
+        const currentStaff = document.getElementById("fVisitStaff").value || "";
+        const tbody = document.getElementById("visitTableBody");
+        
+        tbody.innerHTML = "";
+        mockVisitRows
+          .forEach(v => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td class="text-center">${escapeHtml(v.assessDate)}</td>
+              <td class="text-center">${escapeHtml(v.visitTime)}</td>
+              <td>${escapeHtml(v.unitName)}</td>
+              <td class="text-center">${escapeHtml(v.visitStaff)}</td>
+              <td class="text-center">
+                <button type="button" class="btn btn-primary btn-sm" data-act="edit" data-id="${v.id}">管理</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+      }
+      renderVisitTable();
+
+      document.getElementById("fVisitStaff").addEventListener("change", renderVisitTable);
+
+      document.getElementById("visitTableBody").addEventListener("click", (e) => {
+        const btn = e.target.closest("button");
+        if(!btn) return;
+        const id = btn.getAttribute("data-id");
+        const act = btn.getAttribute("data-act");
+        const v = mockVisitRows.find(x => x.id === id);
+        if(!v) return;
+        
+        // 跳轉至訪視紀錄表單頁面，傳遞 visitId, act, 以及原本的 caseId (用於返回)
+        const caseId = JOY.getQueryParam("id");
+        window.location.href = `./visit-form.html?visitId=${encodeURIComponent(id)}&act=${encodeURIComponent(act)}&caseId=${encodeURIComponent(caseId)}`;
+      });
+
+      // Add Visit Button
+      document.getElementById("btnAddVisit").addEventListener("click", () => {
+        const caseId = JOY.getQueryParam("id");
+        window.location.href = `./visit-form.html?act=add&caseId=${encodeURIComponent(caseId)}`;
+      });
+
+      // ID No fill button
+      const btnFill = document.getElementById("btnFillIdNo");
+      btnFill.addEventListener("click", () => {
+        document.getElementById("fIdNo").value = rec.idNo || "";
+      });
+
+      function escapeHtml(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#039;");
+      }
+
+      // default check for 1966 (mock: random)
+    })();
+  </script>
+</body>
+</html>

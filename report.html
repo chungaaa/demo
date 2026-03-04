@@ -1,0 +1,173 @@
+﻿﻿﻿﻿<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>長照服務品質管理｜統計報表</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <div style="font-size:14px; line-height:1;">新竹縣智慧福利服務躍升</div>
+          <div style="font-size:12px; opacity:.9; font-weight:800;">長照服務品質管理</div>
+        </div>
+      </div>
+
+      <div class="nav-title">功能選單</div>
+
+      <details class="mt-1" open>
+        <summary class="menu-summary">
+          <span class="menu-summary-title">長照服務品質管理</span>
+          <span class="menu-summary-caret">▾</span>
+        </summary>
+
+        <ul class="menu mt-2">
+          <li>
+            <a href="./index.html">
+              <span>個案管理</span>
+            </a>
+          </li>
+          <li>
+            <a class="active" href="./report.html">
+              <span>統計報表</span>
+            </a>
+          </li>
+          <li>
+            <a href="./staff.html">
+              <span>訪視員管理</span>
+            </a>
+          </li>
+        </ul>
+      </details>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="left">
+          <span style="font-size:18px;">新竹縣智慧福利服務躍升</span>
+          <span class="pill">統計報表</span>
+        </div>
+        <div style="opacity:.95; font-weight:800;">
+          <span class="me-2">👤</span>系統管理員
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="page-title">▶ 統計報表</div>
+
+        <section class="card">
+          <div class="card-header-soft">報表匯出條件</div>
+          <div class="form-grid">
+            <div class="row align-items-end g-3">
+              <div class="col-lg-3 col-md-4">
+                <label class="lbl" for="reportYear">年份</label>
+                <select id="reportYear" class="form-select"></select>
+              </div>
+              <div class="col-lg-3 col-md-4">
+                <label class="lbl" for="reportMonth">月份</label>
+                <select id="reportMonth" class="form-select"></select>
+              </div>
+              <div class="col-lg-6 col-md-4">
+                <div class="small-hint">依評估日期匯出當月個案資料（Prototype CSV）。</div>
+              </div>
+            </div>
+          </div>
+          <div class="actions-row">
+            <button id="btnExportReport" class="btn btn-brand">匯出報表</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+  <script>
+    (async function init(){
+      const data = await JOY.loadData();
+      const records = Array.isArray(data.mockRecords) ? data.mockRecords : [];
+
+      const yearEl = document.getElementById("reportYear");
+      const monthEl = document.getElementById("reportMonth");
+      const btnExport = document.getElementById("btnExportReport");
+
+      const years = Array.from(new Set(
+        records
+          .map(r => String(r.assessDateISO || "").slice(0, 4))
+          .filter(y => /^\d{4}$/.test(y))
+      )).sort();
+
+      const now = new Date();
+      const defaultYear = String(now.getFullYear());
+      const defaultMonth = String(now.getMonth() + 1).padStart(2, "0");
+
+      const yearOptions = years.length ? years : [defaultYear];
+      JOY.setSelectOptions(yearEl, yearOptions, "請選擇年份");
+      JOY.setSelectOptions(monthEl, Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, "0")), "請選擇月份");
+
+      if (yearOptions.includes(defaultYear)) yearEl.value = defaultYear;
+      if (monthEl.querySelector(`option[value="${defaultMonth}"]`)) monthEl.value = defaultMonth;
+
+      btnExport.addEventListener("click", () => {
+        const y = yearEl.value;
+        const m = monthEl.value;
+        if (!y || !m) {
+          alert("請先選擇年份與月份");
+          return;
+        }
+
+        const ymPrefix = `${y}-${m}-`;
+        const list = records.filter(r => String(r.assessDateISO || "").startsWith(ymPrefix));
+
+        const rows = [
+          ["報表年月", `${y}-${m}`],
+          [],
+          ["個案編號", "個案姓名", "身分證", "電話", "鄉鎮", "訪視人員", "單位名稱", "評估日期"]
+        ];
+
+        for (const r of list) {
+          rows.push([
+            r.id || "",
+            r.caseName || "",
+            r.idNo || "",
+            r.phone || "",
+            r.town || "",
+            r.visitStaff || "",
+            r.unitName || "",
+            r.assessDateISO || ""
+          ]);
+        }
+
+        if (!list.length) {
+          rows.push(["無資料"]);
+        }
+
+        const csv = rows.map(cols => cols.map(csvCell).join(",")).join("\r\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `統計報表_${y}${m}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      function csvCell(value){
+        const s = String(value ?? "");
+        const escaped = s.replaceAll('"', '""');
+        return `"${escaped}"`;
+      }
+    })().catch(err => {
+      console.error(err);
+      alert("報表頁初始化失敗，請確認 assets/data.json 是否可讀取。");
+    });
+  </script>
+</body>
+</html>
